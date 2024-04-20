@@ -34,3 +34,20 @@
           - ex. API通信、UserDefaultsへのアクセス　　など
     - 以上の責務をReduceというAPIで実現する。
     - ReducerOf<Self>はReducer<Self.State, Self.Action>のtypealias
+## 2. Storeについて
+- ReducerとViewを繋ぎ込むためのAPI
+- 機能におけるランタイムとしての責務
+  - Reducerの実装に則ってStateを更新するためにActionを処理したり、Effectを実行したりする。
+- StoreOf<XXX>はStore<XXX.State, XXX.Action>のtypealias
+- iOS16以前をサポートする場合は、Observation の backport framework である swift-perception の `WithPerceptionTracking` で各 View を包む必要がある (詳しくは[Observation backport](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/observationbackport))。iOS17以降ではObservation frameworkが利用可能のため、不要。
+- .onAppearのタイミングでReducerの定義した.onAppearを発火させている。        
+  ```swift
+  public var body: some View {
+    Group {
+      ...
+    }
+    .onAppear {
+      store.send(.onAppear)
+    }
+  }
+  ```
