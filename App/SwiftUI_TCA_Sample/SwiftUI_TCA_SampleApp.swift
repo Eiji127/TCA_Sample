@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import RepositoryListFeature
 
 @main
 struct SwiftUI_TCA_SampleApp: App {
     var body: some Scene {
         WindowGroup {
-            
+            RepositoryListView()
         }
     }
 }
