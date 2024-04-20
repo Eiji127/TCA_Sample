@@ -11,6 +11,21 @@ import SwiftUI
 
 @Reducer
 public struct RepositoryList {
+    @ObservableState
+    public struct State: Equatable {
+        var repositories: [Repository] = []
+        var isLoading: Bool = false
+        
+        public init() {}
+    }
+    
+    public enum Action {
+        /// 「画面の表示」を示すアクション
+        case onAppear
+        /// 「GitHub API Request の結果の取得」を示すアクション
+        case searchRepositoriesResponse(Result<[Repository], Error>)
+    }
+    
     public init() {}
 }
 
