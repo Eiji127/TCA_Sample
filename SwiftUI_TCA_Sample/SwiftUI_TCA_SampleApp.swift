@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftUI_TCA_SampleApp: App {
     var body: some Scene {
         WindowGroup {
-            RepositoryListView()
+            
         }
     }
 }
