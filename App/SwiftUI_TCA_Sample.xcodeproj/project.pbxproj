@@ -11,6 +11,7 @@
 		985635942B9D65D300635CEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 985635932B9D65D300635CEB /* Assets.xcassets */; };
 		985635972B9D65D300635CEB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 985635962B9D65D300635CEB /* Preview Assets.xcassets */; };
 		9884A8D22BD3FD5200C9BEA1 /* RepositoryListFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 9884A8D12BD3FD5200C9BEA1 /* RepositoryListFeature */; };
+		9884A8D42BD40DF100C9BEA1 /* Entity in Frameworks */ = {isa = PBXBuildFile; productRef = 9884A8D32BD40DF100C9BEA1 /* Entity */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9884A8D22BD3FD5200C9BEA1 /* RepositoryListFeature in Frameworks */,
+				9884A8D42BD40DF100C9BEA1 /* Entity in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +96,7 @@
 			name = SwiftUI_TCA_Sample;
 			packageProductDependencies = (
 				9884A8D12BD3FD5200C9BEA1 /* RepositoryListFeature */,
+				9884A8D32BD40DF100C9BEA1 /* Entity */,
 			);
 			productName = SwiftUI_TCA_Sample;
 			productReference = 9856358C2B9D65D200635CEB /* SwiftUI_TCA_Sample.app */;
@@ -374,6 +377,10 @@
 		9884A8D12BD3FD5200C9BEA1 /* RepositoryListFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RepositoryListFeature;
+		};
+		9884A8D32BD40DF100C9BEA1 /* Entity */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Entity;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
