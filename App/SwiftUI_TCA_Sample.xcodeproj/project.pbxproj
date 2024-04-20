@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9805BA092BD3F5930033EB3D /* TCA_Sample in Frameworks */ = {isa = PBXBuildFile; productRef = 9805BA082BD3F5930033EB3D /* TCA_Sample */; };
 		985635902B9D65D200635CEB /* SwiftUI_TCA_SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9856358F2B9D65D200635CEB /* SwiftUI_TCA_SampleApp.swift */; };
 		985635942B9D65D300635CEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 985635932B9D65D300635CEB /* Assets.xcassets */; };
 		985635972B9D65D300635CEB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 985635962B9D65D300635CEB /* Preview Assets.xcassets */; };
@@ -19,7 +20,7 @@
 		9856358F2B9D65D200635CEB /* SwiftUI_TCA_SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_TCA_SampleApp.swift; sourceTree = "<group>"; };
 		985635932B9D65D300635CEB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		985635962B9D65D300635CEB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		98B865A72BD3EE5A006ED13E /* TCA_Sample */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TCA_Sample; path = ../TCA_Sample; sourceTree = "<group>"; };
+		9884A8CF2BD3F68C00C9BEA1 /* TCA_Sample */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TCA_Sample; path = ../TCA_Sample; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +30,7 @@
 			files = (
 				98AFB7752BD1EA8200DD2104 /* ComposableArchitecture in Frameworks */,
 				98B865AA2BD3EE97006ED13E /* TCA_Sample in Frameworks */,
+				9805BA092BD3F5930033EB3D /* TCA_Sample in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,7 +40,7 @@
 		985635832B9D65D100635CEB = {
 			isa = PBXGroup;
 			children = (
-				98B865A72BD3EE5A006ED13E /* TCA_Sample */,
+				9884A8CF2BD3F68C00C9BEA1 /* TCA_Sample */,
 				9856358E2B9D65D200635CEB /* SwiftUI_TCA_Sample */,
 				9856358D2B9D65D200635CEB /* Products */,
 				98B865A82BD3EE97006ED13E /* Frameworks */,
@@ -97,6 +99,7 @@
 			packageProductDependencies = (
 				98AFB7742BD1EA8200DD2104 /* ComposableArchitecture */,
 				98B865A92BD3EE97006ED13E /* TCA_Sample */,
+				9805BA082BD3F5930033EB3D /* TCA_Sample */,
 			);
 			productName = SwiftUI_TCA_Sample;
 			productReference = 9856358C2B9D65D200635CEB /* SwiftUI_TCA_Sample.app */;
@@ -374,6 +377,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9805BA082BD3F5930033EB3D /* TCA_Sample */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TCA_Sample;
+		};
 		98AFB7742BD1EA8200DD2104 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 98AFB7732BD1EA8200DD2104 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
