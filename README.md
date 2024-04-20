@@ -2,6 +2,7 @@
 
 ## 0. SPMによるマルチモジュール化について
 - 以下の記事を参考に行うことができる。
+
   https://zenn.dev/kalupas226/articles/73118709e316ad
         
 ## 1. Reducerについて
