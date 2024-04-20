@@ -5,7 +5,14 @@
 //  Created by 白数叡司 on 2024/04/20.
 //
 
+import ComposableArchitecture
+import Entity
 import SwiftUI
+
+@Reducer
+public struct RepositoryList {
+    public init() {}
+}
 
 public struct RepositoryListView: View {
     
