@@ -8,6 +8,7 @@
 import ComposableArchitecture
 import Entity
 import Foundation
+import IdentifiedCollections
 import SwiftUI
 
 // MARK: - Reducer
@@ -15,7 +16,7 @@ import SwiftUI
 public struct RepositoryList {
     @ObservableState
     public struct State: Equatable {
-        var repositories: [Repository] = []
+        var repositoryRows: IdentifiedArrayOf<RepositoryRow.State> = []
         var isLoading: Bool = false
         
         public init() {}
@@ -26,6 +27,7 @@ public struct RepositoryList {
         case onAppear
         /// 「GitHub API Request の結果の取得」を示すアクション
         case searchRepositoriesResponse(Result<[Repository], Error>)
+        case repositoryRows(IdentifiedActionOf<RepositoryRow>)
     }
     
     public init() {}
@@ -60,13 +62,22 @@ public struct RepositoryList {
                 
                 switch result {
                 case let .success(response):
-                    state.repositories = response
+                    state.repositoryRows = .init(
+                        uniqueElements: response.map {
+                            .init(repository: $0)
+                        }
+                    )
                     return .none
                 case .failure:
                     // TODO: Handling Error
                     return .none
                 }
+            case .repositoryRows:
+                return .none
             }
+        }
+        .forEach(\.repositoryRows, action: \.repositoryRows) {
+            RepositoryRow()
         }
     }
     
