@@ -51,3 +51,88 @@
     }
   }
   ```
+## 3. Previewによる動作確認のついて
+- Viewをinitializeするとき、StoreOf<XXX>を提供する必要がある。
+  - Storeのinitializerには以下の要素がある。
+    - initialState
+    - reducer
+    - withDependencies
+- Xcode Previewのinitializeで指定しているReducerに `._printChanges()` を付与すると以下のように、Reducerで起きたActionやStateの変化をログとして出力することができる。
+        
+  ```lldb
+  received action:
+  RepositoryList.Action.onAppear
+  RepositoryList.State(
+    _repositories: [],
+  -   _isLoading: false
+  +   _isLoading: true
+  )
+
+  received action:
+  RepositoryList.Action.searchRepositoriesResponse(
+    .success(
+      [
+        [0]: Repository(
+          id: 15111821,
+          fullName: "grafana/grafana",
+          description: "The open and composable observability and data visualization platform. Visualize metrics, logs, and traces from multiple sources like Prometheus, Loki, Elasticsearch, InfluxDB, Postgres and many more. ",
+          stargazersCount: 60288,
+          language: "TypeScript",
+          htmlUrl: URL(https://github.com/grafana/grafana)
+        ),
+        [1]: Repository(
+          id: 7508411,
+          fullName: "ReactiveX/RxJava",
+          description: "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+          stargazersCount: 47627,
+          language: "Java",
+          htmlUrl: URL(https://github.com/ReactiveX/RxJava)
+        ),
+        
+        ...
+        
+        [29]: Repository(
+          id: 715082,
+          fullName: "reactiveui/ReactiveUI",
+          description: "An advanced, composable, functional reactive model-view-viewmodel framework for all .NET platforms that is inspired by functional reactive programming. ReactiveUI allows you to  abstract mutable state away from your user interfaces, express the idea around a feature in one readable place and improve the testability of your application.",
+          stargazersCount: 7900,
+          language: "C#",
+          htmlUrl: URL(https://github.com/reactiveui/ReactiveUI)
+        )
+      ]
+    )
+  )
+  RepositoryList.State(
+    _repositories: [
+  +     [0]: Repository(
+  +       id: 15111821,
+  +       fullName: "grafana/grafana",
+  +       description: "The open and composable observability and data visualization platform. Visualize metrics, logs, and traces from multiple sources like Prometheus, Loki, Elasticsearch, InfluxDB, Postgres and many more. ",
+  +       stargazersCount: 60288,
+  +       language: "TypeScript",
+  +       htmlUrl: URL(https://github.com/grafana/grafana)
+  +     ),
+  +     [1]: Repository(
+  +       id: 7508411,
+  +       fullName: "ReactiveX/RxJava",
+  +       description: "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+  +       stargazersCount: 47627,
+  +       language: "Java",
+  +       htmlUrl: URL(https://github.com/ReactiveX/RxJava)
+  +     ),
+
+	  		...
+			
+  +     [29]: Repository(
+  +       id: 715082,
+  +       fullName: "reactiveui/ReactiveUI",
+  +       description: "An advanced, composable, functional reactive model-view-viewmodel framework for all .NET platforms that is inspired by functional reactive programming.     ReactiveUI allows you to  abstract mutable state away from your user interfaces, express the idea around a feature in one readable place and improve the testability of your application.",
+  +       stargazersCount: 7900,
+  +       language: "C#",
+  +       htmlUrl: URL(https://github.com/reactiveui/ReactiveUI)
+  +     )
+      ],
+  -   _isLoading: true
+  +   _isLoading: false
+  )
+  ```
