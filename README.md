@@ -136,3 +136,9 @@
   +   _isLoading: false
   )
   ```
+## 4. IdentifiedArrayについて
+- Row ReducerをList Reducerに結合する時に使用。
+- 1つのList Reducerが、Row Reducerの集合体を保持するような構造を表現するのに、 `IdentifiedArray` というAPIを利用する。
+- `IdentifiedArray` は  `Identifinable` な要素に特化したものとなっている。
+- `IdentifiedArray` はIDとElementという2つのGenericsを満たすことで利用可能。
+- `IdentifiedArray` は swift-identified-collectionsというライブラリに収録されている。
