@@ -4,7 +4,7 @@
 //
 //  Created by 白数叡司 on 2024/04/20.
 //
-
+import CasePaths
 import ComposableArchitecture
 import Entity
 import Foundation
@@ -102,42 +102,13 @@ public struct RepositoryListView: View {
                 ProgressView()
             } else {
                 List {
-                    ForEach(store.repositories, id: \.id) { repository in
-                        Button {
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(repository.fullName)
-                                    .font(.title2.bold())
-                                Text(repository.description ?? "")
-                                    .font(.body)
-                                    .lineLimit(2)
-                                HStack(alignment: .center, spacing: 32) {
-                                    Label(
-                                        title: {
-                                            Text("\(repository.stargazersCount)")
-                                                .font(.callout)
-                                        },
-                                        icon: {
-                                            Image(systemName: "star.fill")
-                                                .foregroundStyle(.yellow)
-                                        }
-                                    )
-                                    Label(
-                                        title: {
-                                            Text(repository.language ?? "")
-                                                .font(.callout)
-                                        },
-                                        icon: {
-                                            Image(systemName: "text.word.spacing")
-                                                .foregroundStyle(.gray)
-                                        }
-                                    )
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    ForEach(
+                        store.scope(
+                            state: \.repositoryRows,
+                            action: \.repositoryRows
+                        ),
+                        content: RepositoryRowView.init(store:)
+                    )
                 }
             }
         }
