@@ -132,10 +132,16 @@ public struct RepositoryListView: View {
         }
         .onAppear {
             store.send(.onAppear)
-        } 
+        }
     }
 }
 
-//#Preview {
-//    RepositoryListView()
-//}
+#Preview {
+    RepositoryListView(
+        store: .init(
+            initialState: RepositoryList.State()
+        ) {
+            RepositoryList()._printChanges()
+        }
+    )
+}

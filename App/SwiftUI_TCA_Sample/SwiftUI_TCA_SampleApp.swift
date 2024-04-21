@@ -12,7 +12,7 @@ import RepositoryListFeature
 struct SwiftUI_TCA_SampleApp: App {
     var body: some Scene {
         WindowGroup {
-            RepositoryListView()
+            EmptyView()
         }
     }
 }
