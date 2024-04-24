@@ -18,21 +18,24 @@ public struct RepositoryList {
     public struct State: Equatable {
         var repositoryRows: IdentifiedArrayOf<RepositoryRow.State> = []
         var isLoading: Bool = false
+        var query: String = ""
         
         public init() {}
     }
     
-    public enum Action {
+    public enum Action: BindableAction {
         /// 「画面の表示」を示すアクション
         case onAppear
         /// 「GitHub API Request の結果の取得」を示すアクション
         case searchRepositoriesResponse(Result<[Repository], Error>)
         case repositoryRows(IdentifiedActionOf<RepositoryRow>)
+        case binding(BindingAction<State>)
     }
     
     public init() {}
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -73,6 +76,8 @@ public struct RepositoryList {
                     return .none
                 }
             case .repositoryRows:
+                return .none
+            case .binding:
                 return .none
             }
         }
