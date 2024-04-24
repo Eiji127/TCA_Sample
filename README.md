@@ -142,3 +142,31 @@
 - `IdentifiedArray` は  `Identifinable` な要素に特化したものとなっている。
 - `IdentifiedArray` はIDとElementという2つのGenericsを満たすことで利用可能。
 - `IdentifiedArray` は swift-identified-collectionsというライブラリに収録されている。
+## 5. Binding Reducerについて
+- Pure SwiftUIではBindingを実現するために@Bindingを使用するが、TCAでは@Bindingだけでなく、以下のAPIを使用する。
+  - BindingAction
+    - `BindableAction` と `BindableAction` がある。
+    - BindingActionはReducer内のActionに加える。
+    - `BindinableAction` Protocolに準拠させるためには以下のcaseをActionに追加する必要がある。            
+    ```swift
+    public enum Action: BindableAction {
+    	...
+    	case binding(BindingAction<State>)
+    }
+    ```
+  - BindingReducer
+    - BindingReducerはReducer内のbodyに追加する。                
+    ```swift
+    public var body: some ReducerOf<Self> {
+    	BindingReducer()
+      	Reduce { state, action in
+    		...
+      	case .binding:
+      		return ...
+      	}
+    }
+    ```          
+    - Binding Valueとして提供するStateとBindingActionを機能させることができる。
+- View側でBindingを実装するためには以下の内容をView側に追加する必要がある。
+  - iOS17以降の場合は、@Binableを利用したプロパティ
+  - iOS16以前の場合は、swift-perception に用意されている `@Perception.Bindable` を代わりに利用する必要がある。
