@@ -165,8 +165,26 @@
       		return ...
       	}
     }
-    ```          
+    ```
     - Binding Valueとして提供するStateとBindingActionを機能させることができる。
 - View側でBindingを実装するためには以下の内容をView側に追加する必要がある。
   - iOS17以降の場合は、@Binableを利用したプロパティ
   - iOS16以前の場合は、swift-perception に用意されている `@Perception.Bindable` を代わりに利用する必要がある。
+- BindingしたプロパティはReducerのbody内で以下のように設定する。
+    - 今回だとqueryをバインディングしたいため、queryを設定。
+    ```swift
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            ...
+            case .binding(\.query):
+                return ...
+            ...
+            }
+        }
+    }
+    ```
+## 6. Debounce設定について
+- TCAにはDebounceを設定するための APIとして、 `Effect.debounce(id:for:scheduler:)` が用意されている。
+- Effect.runにつけることで実装可能。
