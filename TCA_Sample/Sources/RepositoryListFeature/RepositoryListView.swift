@@ -29,10 +29,15 @@ public struct RepositoryList {
         /// 「GitHub API Request の結果の取得」を示すアクション
         case searchRepositoriesResponse(Result<[Repository], Error>)
         case repositoryRows(IdentifiedActionOf<RepositoryRow>)
+        case queryChangeDebounced
         case binding(BindingAction<State>)
     }
     
     public init() {}
+    
+    private enum CancelId {
+        case response
+    }
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -40,26 +45,7 @@ public struct RepositoryList {
             switch action {
             case .onAppear:
                 state.isLoading = true
-                return .run { send in
-                    await send(
-                        .searchRepositoriesResponse(
-                            Result {
-                                let query = "composable"
-                                let url = URL(string: "https://api.github.com/search/repositories?q=\(query)&sort=stars")!
-                                var request = URLRequest(url: url)
-                                if let token = Bundle.main.infoDictionary?["GitHubPersonalAccessToken"] as? String {
-                                    request.setValue(
-                                        "Bearer \(token)",
-                                        forHTTPHeaderField: "Authorization"
-                                    )
-                                }
-                                let (data, _) = try await URLSession.shared.data(for: request)
-                                let repositories = try jsonDecoder.decode(GithubSearchResult.self, from: data).items
-                                return repositories
-                            }
-                        )
-                    )
-                }
+                return searchRepositories(by: "composable")
             case let .searchRepositoriesResponse(result):
                 state.isLoading = false
                 
@@ -77,6 +63,21 @@ public struct RepositoryList {
                 }
             case .repositoryRows:
                 return .none
+            case .binding(\.query):
+                return .run { send in
+                    await send(.queryChangeDebounced)
+                }
+                .debounce(
+                    id: CancelId.response,
+                    for: .seconds(0.3),
+                    scheduler: DispatchQueue.main
+                )
+            case .queryChangeDebounced:
+                guard !state.query.isEmpty else {
+                    return .none
+                }
+                state.isLoading = true
+                return searchRepositories(by: state.query)
             case .binding:
                 return .none
             }
@@ -90,6 +91,31 @@ public struct RepositoryList {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
+    }
+    
+    func searchRepositories(by query: String) -> Effect<Action> {
+        .run { send in
+            await send(
+                .searchRepositoriesResponse(
+                    Result {
+                        let url = URL(string: "https://api.github.com/search/repositories?q=\(query)&sort=stars")!
+                        var request = URLRequest(url: url)
+                        if let token = Bundle.main.infoDictionary?["GitHubPersonalAccessToken"] as? String {
+                            request.setValue(
+                                "Bearer \(token)",
+                                forHTTPHeaderField: "Authorization"
+                            )
+                        }
+                        let (data, _) = try await URLSession.shared.data(for: request)
+                        let repositories = try jsonDecoder.decode(
+                            GithubSearchResult.self,
+                            from: data
+                        ).items
+                        return repositories
+                    }
+                )
+            )
+        }
     }
 }
 
