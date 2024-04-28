@@ -188,3 +188,11 @@
 ## 6. Debounce設定について
 - TCAにはDebounceを設定するための APIとして、 `Effect.debounce(id:for:scheduler:)` が用意されている。
 - Effect.runにつけることで実装可能。
+## 7. Xcode Previewの改善について
+- Previews は View や挙動をサイクル早く修正できることがメリット
+- Xcode Previewで実際のAPIを叩いて表示しているのはあまり良くない。
+- Swiftにおけるinterfaceはprotocolで定義しがち。
+  - TCA (Point-free) では、structのclosure propertiesで表現することを推奨している。
+  - structでinterfaceを定義することで、swift-dependenciesと親和性の高いコードが書ける。(詳しくは[swift-dependencies のドキュメント](https://pointfreeco.github.io/swift-dependencies/main/documentation/dependencies/designingdependencies))
+  - structの方法で依存関係を制御することで、機能に必要な依存関係エンドポイントを選択ことができる。
+    - ex. structで定義したAudioPlayerというinterfaceがあり、play、stop、….などの関数があったとき、playしか呼び出す必要がないときにplayのみを選択することができ、不要な処理まで読み込む必要はなくなる。
