@@ -196,3 +196,14 @@
   - structでinterfaceを定義することで、swift-dependenciesと親和性の高いコードが書ける。(詳しくは[swift-dependencies のドキュメント](https://pointfreeco.github.io/swift-dependencies/main/documentation/dependencies/designingdependencies))
   - structの方法で依存関係を制御することで、機能に必要な依存関係エンドポイントを選択ことができる。
     - ex. structで定義したAudioPlayerというinterfaceがあり、play、stop、….などの関数があったとき、playしか呼び出す必要がないときにplayのみを選択することができ、不要な処理まで読み込む必要はなくなる。
+- swift-dependencies は Point-Free 製の依存関係を管理するためのライブラリ。
+  - swift-dependencies を利用するために `Dependencies` を import する必要がある。
+  - swift-dependenciesの`Dependencies` 内にあるDependencyKeyというprotocolをClientに準拠する。
+  - `TestDependencyKey` という protocolがある。
+    - Xcode Previews とテストのために依存関係を提供するKey
+    - ClientにはpreviewValueを定義する。
+    - `previewValue` は Xcode Previews のための依存関係としての機能
+      - 基本的には何もしない実装 (no operation) に近い形で提供することが推奨されている。
+    - `testValue` はテストのための依存関係としての機能
+      - 実装はPoint-freeの慣習に則り、xctest-dynamic-overlay というライブラリに定義されている `unimplemented` を利用する。
+      - `unimplemented` は`XCTFail` を内部で利用しているため、もしテストで依存関係を適切に上書きしなかった場合、テストを失敗させてくれるようになっている。
