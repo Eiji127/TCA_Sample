@@ -26,6 +26,7 @@ let package = Package(
           name: "RepositoryListFeature",
           dependencies: [
             "Entity",
+            "GithubAPIClient",
             .product(name: "CasePaths", package: "swift-case-paths"),
             .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             .product(name: "Dependencies", package: "swift-dependencies"),
