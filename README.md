@@ -207,3 +207,6 @@
     - `testValue` はテストのための依存関係としての機能
       - 実装はPoint-freeの慣習に則り、xctest-dynamic-overlay というライブラリに定義されている `unimplemented` を利用する。
       - `unimplemented` は`XCTFail` を内部で利用しているため、もしテストで依存関係を適切に上書きしなかった場合、テストを失敗させてくれるようになっている。
+  - DependencyKeyはすでにTestDependencyKeyを準拠しているため、DependencyKeyのみでpreviewValueとtestValueを定義することができる。
+    - ただ、実装部分を明確に区切ることができたり、意識して使えばモジュール分離の観点で、別々に定義した方がメリットがある。
+  - swift-dependencies に用意されている `@DepenedencyClient` macro を利用することも可能。
