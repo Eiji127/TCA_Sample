@@ -210,3 +210,24 @@
   - DependencyKeyはすでにTestDependencyKeyを準拠しているため、DependencyKeyのみでpreviewValueとtestValueを定義することができる。
     - ただ、実装部分を明確に区切ることができたり、意識して使えばモジュール分離の観点で、別々に定義した方がメリットがある。
   - swift-dependencies に用意されている `@DepenedencyClient` macro を利用することも可能。
+## 8. TCAにおけるUnit Testについて
+- TCAのテストサポート機能は基本的にMainActorのcontextで動作することが前提となっている。
+  - そのため、テストクラスには＠MainActorを付与しておく必要がある。
+- ロジックはReducerにまとめられているため、基本的にはReducerのテストを書いていく。
+- 実動作ではReducerを駆動するランタイムとしてStoreを使用するが、テストの時はテスト用のランタイムとしてTestStoreを用いる。
+  - TestStoreは通常のStoreと同様に引数にinitialStateとReducerを提供することで初期化することができる。
+  ```swift:
+  let store = TestStore(
+    initialState: RepositoryList.State()
+  ) {
+    RepositoryList()
+  }
+  ```      
+- TCAには以下のテストエラーが表示される。
+  - Unhandled actions：本来発生するはずの Action をテストで Assert できていないため発生するエラー。
+  - Unimplemented：テストで依存関係を適切に上書きしなかった場合に発生するテストエラー。意図していない依存関係が呼ばれていることにテストで気づくことができる。
+    
+  ![スクリーンショット 2024-05-05 0.22.01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/02363de9-9c20-4532-b6e8-336c634f993d/31492072-eea2-4059-9f25-80dbc3892ee2/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2024-05-05_0.22.01.png)
+    
+- Reducerの処理の流れで発生するはずのActionをAssertするためには、 `receive`functionを使用する。
+  - KeyPathを引数に受け取ることでassociated valueが必要なActionのcaseを、associated valueの指定なしで記述することができる。
