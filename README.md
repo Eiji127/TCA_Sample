@@ -216,7 +216,7 @@
 - ロジックはReducerにまとめられているため、基本的にはReducerのテストを書いていく。
 - 実動作ではReducerを駆動するランタイムとしてStoreを使用するが、テストの時はテスト用のランタイムとしてTestStoreを用いる。
   - TestStoreは通常のStoreと同様に引数にinitialStateとReducerを提供することで初期化することができる。
-  ```swift:
+  ```swift
   let store = TestStore(
     initialState: RepositoryList.State()
   ) {
