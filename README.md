@@ -226,8 +226,8 @@
 - TCAには以下のテストエラーが表示される。
   - Unhandled actions：本来発生するはずの Action をテストで Assert できていないため発生するエラー。
   - Unimplemented：テストで依存関係を適切に上書きしなかった場合に発生するテストエラー。意図していない依存関係が呼ばれていることにテストで気づくことができる。
-    
-  ![スクリーンショット 2024-05-05 0.22.01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/02363de9-9c20-4532-b6e8-336c634f993d/31492072-eea2-4059-9f25-80dbc3892ee2/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2024-05-05_0.22.01.png)
-    
+  
+  ![スクリーンショット 2024-05-05 0 22 01](https://github.com/Eiji127/TCA_Sample/assets/64912886/ed079d24-3548-4828-86f9-b5cde9c4c9c6)
+  
 - Reducerの処理の流れで発生するはずのActionをAssertするためには、 `receive`functionを使用する。
   - KeyPathを引数に受け取ることでassociated valueが必要なActionのcaseを、associated valueの指定なしで記述することができる。
