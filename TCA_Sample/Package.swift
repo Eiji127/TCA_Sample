@@ -34,6 +34,12 @@ let package = Package(
             .product(name: "SwiftUINavigationCore", package: "swiftui-navigation"),
           ]
         ),
+        .testTarget(
+          name: "RepositoryListFeatureTests",
+          dependencies: [
+            "RepositoryListFeature"
+          ]
+        ),
         .target(
           name: "Entity"
         ),
