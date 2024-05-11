@@ -42,6 +42,7 @@ public struct RepositoryList {
     }
     
     @Dependency(\.gitHubAPIClient) var githubAPIClient
+    @Dependency(\.mainQueue) var mainQueue
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -74,7 +75,7 @@ public struct RepositoryList {
                 .debounce(
                     id: CancelId.response,
                     for: .seconds(0.3),
-                    scheduler: DispatchQueue.main
+                    scheduler: mainQueue
                 )
             case .queryChangeDebounced:
                 guard !state.query.isEmpty else {
