@@ -231,3 +231,56 @@
   
 - Reducerの処理の流れで発生するはずのActionをAssertするためには、 `receive`functionを使用する。
   - KeyPathを引数に受け取ることでassociated valueが必要なActionのcaseを、associated valueの指定なしで記述することができる。
+- Reducer側で直接DispatchQueue.mainを指定していると、テストで依存関係をせいぎょすることができないため、swift-dependenciesの`@Dependency(\.mainQueue)` を利用し、schedulerを設定する。
+    
+    ```swift
+    @Reducer
+    public struct RepositoryList {
+    	...
+    	@Dependency(\.mainQueue) var mainQueue
+    	
+    	public var body: some ReducerOf<Self> {
+    		Reduce { state, action in
+          switch action {
+    	      ...
+    	      case .binding(\.query):
+            return .run { send in
+              await send(.queryChangeDebounced)
+            }
+            .debounce(
+              id: CancelID.response,
+              for: .seconds(0.3),
+              scheduler: mainQueue // 👈 変数を渡すことでテスト側で上書きできるようになっている.
+            )
+          }
+        }
+    	}
+    }
+    ```
+    
+    - テスト側ではPoint-Free製の[CombineSchedulers](https://github.com/pointfreeco/combine-schedulers?tab=readme-ov-file)というライブラリをimportし、 `DispatchQueue.test` を呼び出すことで、Schedulerをテスタブルに設定することができる。
+        
+        ```swift
+        @MainActor
+        final class RepositoryListFeatureTests: XCTestCase {
+        	...
+        	func testQueryChanged() async {
+        		...
+        		let testScheduler = DispatchQueue.test
+        		let store = TestStore(
+              initialState: RepositoryList.State()
+            ) {
+              RepositoryList()
+            } withDependencies: {
+              ...
+              $0.mainQueue = testScheduler.eraseToAnyScheduler()
+            }
+        	}
+        }
+        ```
+        
+    - debounceの0.3秒がテストのロスとなってしまうため、`testScheduler.advance(by:)` を使用し、テスト上の時間を任意の秒数進める。
+        - `XCTWaiter.wait(for:)` を使用すると、実際の秒数を費やしてしまうかつ、テストを不安定にさせてしまう可能性がある。
+        - 詳しくは、Point-Freeの「[Schedulers](https://www.pointfree.co/collections/combine/schedulers)」を参照。
+        - `advance(by:)` の設定時間を0.3秒から0.2秒にするとしっかりテストが失敗するようになっており、かなり正確にテストを実施することができる。  
+	![スクリーンショット 2024-05-12 8 46 40](https://github.com/Eiji127/TCA_Sample/assets/64912886/4f6b2655-9ab5-4913-87e6-46480a4c7fa3)
