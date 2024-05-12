@@ -284,3 +284,83 @@
         - 詳しくは、Point-Freeの「[Schedulers](https://www.pointfree.co/collections/combine/schedulers)」を参照。
         - `advance(by:)` の設定時間を0.3秒から0.2秒にするとしっかりテストが失敗するようになっており、かなり正確にテストを実施することができる。  
 	![スクリーンショット 2024-05-12 8 46 40](https://github.com/Eiji127/TCA_Sample/assets/64912886/4f6b2655-9ab5-4913-87e6-46480a4c7fa3)
+## 9. Tree-based navigationについて
+- TCAでは、AlertやConfirmation Dialog、Popover、Sheet、FullScreenCoverなどのNavigation機能のことを「Tree-based navigation」と表現している。
+- Alert機能の実装
+    - TCAでAlert機能を実装する時は、Reducer内のState、Actionを定義する必要がある。
+    - StateでAlertを定義する時は、 `@Presents` マクロとs[wift-navigation](https://github.com/pointfreeco/swiftui-navigation)というライブラリに用意されている `AlertState` というAPIを使用する。
+        
+        ```swift
+        public struct State: Equatable {
+            ...
+            @Presents var alert: AlertState<Action.Alert>?
+        
+            public init() {}
+        }
+        ```
+        
+    - Action側では、Alert用のblankなenmuを定義し、alert caseを追加する。
+        
+        ```swift
+        public enum Action: BindableAction {
+            ...
+            case alert(PresentationAction<Alert>)
+            
+            public enum Alert: Equatable {}
+        }
+        ```
+        
+    - body側では.failure部分でAlertStateをTextStateというAPIを用いて初期化し、Stateに渡してあげる。
+        - テストでもAlertを使いたいため、汎用的に使用するためにAlertStateのextensionでstaticなpropertyを生やしておくと便利。
+            
+            ```swift
+            extension AlertState where Action == RepositoryList.Action.Alert {
+              static let networkError = Self {
+                TextState("Network Error")
+              } message: {
+                TextState("Failed to fetch data.")
+              }
+            }
+            ```
+            
+    - View側ではPure SwiftUIと同じようにStoreを引数に渡せる `.alert` modifierがTCA側でも用意されているため、それを使用する。
+        
+        ```swift
+        NavigationStack {
+        	...
+        }
+        ...
+        .alert(
+            $store.scope(
+                state: \.alert,
+                action: \.alert
+            )
+        )
+        ```
+        
+    - Previewを行う時は、API通信成功時のPreviewとAPI通信失敗時のPreviewの両方を用意しておくと便利。
+
+      ```swift
+      #Preview("API Succeded") {
+        ...
+      }
+
+      #Preview("API Failed") {
+        enum PreviewError: Error {
+          case fetchFailed
+        }
+        return RepositoryListView(
+          store: .init(
+            initialState: RepositoryList.State()
+        ) {
+            RepositoryList()
+        } withDependencies: {
+            $0.gitHubAPIClient.searchRepositories = { _ in
+                throw PreviewError.fetchFailed
+            }
+          }
+        )
+      }
+      ```
+      <img width="257" alt="スクリーンショット 2024-05-12 12 51 34" src="https://github.com/Eiji127/TCA_Sample/assets/64912886/f743a410-740b-4807-8593-b4fac97f91ed">
+
