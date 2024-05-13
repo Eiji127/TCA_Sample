@@ -1,6 +1,10 @@
 # ■ Sample App with The Composable Architecture
 
 ## 0. SPMによるマルチモジュール化について
+- マルチモジュール化は複数の方法がある。
+  - Swift Package Managerを利用した方法
+  - Frameターゲットを利用した方法
+  - Frameworkプロジェクト + ワークスペースを利用した方法
 - 以下の記事を参考に行うことができる。
 
   https://zenn.dev/kalupas226/articles/73118709e316ad
