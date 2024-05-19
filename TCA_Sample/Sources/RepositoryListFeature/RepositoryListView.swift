@@ -11,6 +11,7 @@ import Entity
 import Foundation
 import GithubAPIClient
 import IdentifiedCollections
+import RepositoryDetailFeature
 import SwiftUI
 import SwiftUINavigationCore
 
@@ -22,7 +23,7 @@ public struct RepositoryList {
         var repositoryRows: IdentifiedArrayOf<RepositoryRow.State> = []
         var isLoading: Bool = false
         var query: String = ""
-        @Presents var alert: AlertState<Action.Alert>?
+        @Presents var destination: Destination.State?
         
         public init() {}
     }
@@ -35,7 +36,7 @@ public struct RepositoryList {
         case repositoryRows(IdentifiedActionOf<RepositoryRow>)
         case queryChangeDebounced
         case binding(BindingAction<State>)
-        case alert(PresentationAction<Alert>)
+        case destination(PresentationAction<Destination.Action>)
         
         public enum Alert: Equatable {}
     }
@@ -68,7 +69,7 @@ public struct RepositoryList {
                     )
                     return .none
                 case .failure:
-                    state.alert = .networkError
+                    state.destination = .alert(.networkError)
                     return .none
                 }
             case .repositoryRows:
@@ -90,7 +91,7 @@ public struct RepositoryList {
                 return searchRepositories(by: state.query)
             case .binding:
                 return .none
-            case .alert:
+            case .destination:
                 return .none
             }
         }
@@ -118,7 +119,7 @@ public struct RepositoryList {
     }
 }
 
-extension AlertState where Action == RepositoryList.Action.Alert {
+extension AlertState where Action == RepositoryList.Destination.Alert {
     static let networkError = Self {
         TextState("Network Error")
     } message: {
@@ -126,6 +127,17 @@ extension AlertState where Action == RepositoryList.Action.Alert {
     }
 }
 
+extension RepositoryList {
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case alert(AlertState<Alert>)
+        case repositoryDetail(RepositoryDetail)
+        
+        public enum Alert: Equatable {
+            
+        }
+    }
+}
 
 // MARK: - View
 public struct RepositoryListView: View {
@@ -163,8 +175,8 @@ public struct RepositoryListView: View {
             )
             .alert(
                 $store.scope(
-                    state: \.alert,
-                    action: \.alert
+                    state: \.destination?.alert,
+                    action: \.destination.alert
                 )
             )
         }

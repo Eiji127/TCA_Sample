@@ -9,8 +9,9 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(name: "RepositoryListFeature", targets: ["RepositoryListFeature"]),
+        .library(name: "RepositoryDetailFeature", targets: ["RepositoryDetailFeature"]),
         .library(name: "Entity", targets: ["Entity"]),
-        .library(name: "GithubAPIClient", targets: ["GithubAPIClient"])
+        .library(name: "GithubAPIClient", targets: ["GithubAPIClient"]),
     ],
     dependencies: [
       .package(url: "https://github.com/pointfreeco/swift-case-paths", from: "1.3.2"),
@@ -27,6 +28,7 @@ let package = Package(
           dependencies: [
             "Entity",
             "GithubAPIClient",
+            "RepositoryDetailFeature",
             .product(name: "CasePaths", package: "swift-case-paths"),
             .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             .product(name: "Dependencies", package: "swift-dependencies"),
@@ -38,6 +40,12 @@ let package = Package(
           name: "RepositoryListFeatureTests",
           dependencies: [
             "RepositoryListFeature"
+          ]
+        ),
+        .target(
+          name: "RepositoryDetailFeature",
+          dependencies: [
+            "GitHubAPIClient"
           ]
         ),
         .target(
