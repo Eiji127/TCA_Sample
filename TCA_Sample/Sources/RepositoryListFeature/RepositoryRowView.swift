@@ -21,12 +21,19 @@ public struct RepositoryRow {
     public enum Action {
         /// 「RepositoryRowViewをタップ」を示すアクション
         case rowTapped
+        case delegate(Delegate)
+        
+        public enum Delegate {
+            case rowTapped
+        }
     }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .rowTapped:
+                return .send(.delegate(.rowTapped))
+            case .delegate(_):
                 return .none
             }
         }

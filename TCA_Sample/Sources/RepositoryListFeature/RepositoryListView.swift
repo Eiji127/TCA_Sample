@@ -72,6 +72,15 @@ public struct RepositoryList {
                     state.destination = .alert(.networkError)
                     return .none
                 }
+            case let .repositoryRows(.element(id, .delegate(.rowTapped))):
+                guard let repository = state.repositoryRows[id: id]?.repository else {
+                    return .none
+                }
+                
+                state.destination = .repositoryDetail(
+                    .init(repository: repository)
+                )
+                return .none
             case .repositoryRows:
                 return .none
             case .binding(\.query):
@@ -98,6 +107,7 @@ public struct RepositoryList {
         .forEach(\.repositoryRows, action: \.repositoryRows) {
             RepositoryRow()
         }
+        .ifLet(\.$destination, action: \.destination)
     }
     
     private var jsonDecoder: JSONDecoder {
@@ -178,6 +188,13 @@ public struct RepositoryListView: View {
                     state: \.destination?.alert,
                     action: \.destination.alert
                 )
+            )
+            .navigationDestination(
+                item: $store.scope(
+                    state: \.destination?.RepositoryDetail,
+                    action: \.destination.repositoryDetail
+                ),
+                destination: RepositoryDetailView.init(store:)
             )
         }
     }
