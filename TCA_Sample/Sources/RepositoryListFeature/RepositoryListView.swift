@@ -143,9 +143,7 @@ extension RepositoryList {
         case alert(AlertState<Alert>)
         case repositoryDetail(RepositoryDetail)
         
-        public enum Alert: Equatable {
-            
-        }
+        public enum Alert: Equatable {}
     }
 }
 
@@ -191,7 +189,7 @@ public struct RepositoryListView: View {
             )
             .navigationDestination(
                 item: $store.scope(
-                    state: \.destination?.RepositoryDetail,
+                    state: \.destination?.repositoryDetail,
                     action: \.destination.repositoryDetail
                 ),
                 destination: RepositoryDetailView.init(store:)
