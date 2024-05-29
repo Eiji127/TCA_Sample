@@ -370,4 +370,16 @@
 
   - Push遷移
     - Navigationを管理するための新しいReducerを定義する。
+      	- Sheet, Alert などの Navigation は複数の種類が同時に発生することはあり得ないため、enum で表現することが適切なため、struct ではなく enum で表現している。
+	- `state` に `.equatable` を指定することで、Reducer の `State` が `Equatable` になる。(詳しくは [Synthesizing protocol conformances on State and Action]		(https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/reducers#Synthesizing-protocol-conformances-on-State-and-Action) )
+
+	```swift
+	extension RepositoryList {
+  	    @Reducer(state: .equatable)
+ 	    public enum Destination {
+		...
+ 	    }
+	}
+	```
+	- Navigation を enum で表現すると、case の associated value で各 Navigation が必要とする状態を保持することができる
     
