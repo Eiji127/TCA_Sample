@@ -368,10 +368,10 @@
       ```
       <img width="257" alt="スクリーンショット 2024-05-12 12 51 34" src="https://github.com/Eiji127/TCA_Sample/assets/64912886/f743a410-740b-4807-8593-b4fac97f91ed">
 
-  - Push遷移
-    - Navigationを管理するための新しいReducerを定義する。
-      	- Sheet, Alert などの Navigation は複数の種類が同時に発生することはあり得ないため、enum で表現することが適切なため、struct ではなく enum で表現している。
-	- `state` に `.equatable` を指定することで、Reducer の `State` が `Equatable` になる。(詳しくは [Synthesizing protocol conformances on State and Action]		(https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/reducers#Synthesizing-protocol-conformances-on-State-and-Action) )
+- Push遷移
+	- Navigationを管理するための新しいReducerを定義する。
+      		- Sheet, Alert などの Navigation は複数の種類が同時に発生することはあり得ないため、enum で表現することが適切なため、struct ではなく enum で表現している。
+		- `state` に `.equatable` を指定することで、Reducer の `State` が `Equatable` になる。(詳しくは [Synthesizing protocol conformances on State and Action]		(https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/reducers#Synthesizing-protocol-conformances-on-State-and-Action) )
 
 	```swift
 	extension RepositoryList {
