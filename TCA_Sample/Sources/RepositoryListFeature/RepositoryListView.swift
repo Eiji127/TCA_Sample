@@ -24,6 +24,7 @@ public struct RepositoryList {
         var isLoading: Bool = false
         var query: String = ""
         @Presents var destination: Destination.State?
+        var path = StackState<Path.State>()
         
         public init() {}
     }
@@ -37,8 +38,7 @@ public struct RepositoryList {
         case queryChangeDebounced
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
-        
-        public enum Alert: Equatable {}
+        case path(StackAction<Path.State, Path.Action>)
     }
     
     public init() {}
@@ -77,8 +77,10 @@ public struct RepositoryList {
                     return .none
                 }
                 
-                state.destination = .repositoryDetail(
-                    .init(repository: repository)
+                state.path.append(
+                    .repositoryDetail(
+                        .init(repository: repository)
+                    )
                 )
                 return .none
             case .repositoryRows:
@@ -102,12 +104,15 @@ public struct RepositoryList {
                 return .none
             case .destination:
                 return .none
+            case .path:
+                return .none
             }
         }
         .forEach(\.repositoryRows, action: \.repositoryRows) {
             RepositoryRow()
         }
         .ifLet(\.$destination, action: \.destination)
+        .forEach(\.path, action: \.path)
     }
     
     private var jsonDecoder: JSONDecoder {
@@ -140,10 +145,15 @@ extension AlertState where Action == RepositoryList.Destination.Alert {
 extension RepositoryList {
     @Reducer(state: .equatable)
     public enum Destination {
-        case alert(AlertState<Alert>)
-        case repositoryDetail(RepositoryDetail)
+        case alert(AlertState<Action.Alert>)
+        
         
         public enum Alert: Equatable {}
+    }
+    
+    @Reducer(state: .equatable)
+    public enum Path {
+        case repositoryDetail(RepositoryDetail)
     }
 }
 
