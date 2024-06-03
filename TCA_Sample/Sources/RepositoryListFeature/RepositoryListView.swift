@@ -145,8 +145,7 @@ extension AlertState where Action == RepositoryList.Destination.Alert {
 extension RepositoryList {
     @Reducer(state: .equatable)
     public enum Destination {
-        case alert(AlertState<Action.Alert>)
-        
+        case alert(AlertState<Alert>)
         
         public enum Alert: Equatable {}
     }
@@ -166,7 +165,12 @@ public struct RepositoryListView: View {
     }
     
     public var body: some View {
-        NavigationStack {
+        NavigationStack(
+            path: $store.scope(
+                state: \.path,
+                action: \.path
+            )
+        ) {
             Group {
                 if store.isLoading {
                     ProgressView()
@@ -197,13 +201,11 @@ public struct RepositoryListView: View {
                     action: \.destination.alert
                 )
             )
-            .navigationDestination(
-                item: $store.scope(
-                    state: \.destination?.repositoryDetail,
-                    action: \.destination.repositoryDetail
-                ),
-                destination: RepositoryDetailView.init(store:)
-            )
+        } destination: { store in
+            switch store.case {
+            case let .repositoryDetail(store):
+                RepositoryDetailView(store: store)
+            }
         }
     }
 }
