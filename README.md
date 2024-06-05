@@ -381,5 +381,15 @@
  	    }
 	}
 	```
-	- Navigation を enum で表現すると、case の associated value で各 Navigation が必要とする状態を保持することができる
-    
+	- Navigation を enum で表現すると、case の associated value で各 Navigation が必要とする状態を保持することができる。
+  - NavigationStackの登場により、Stack-based navigationという新しいNavigationによって、新たなPush遷移の方法が生まれた。
+    - Stack-based navigation APIはCollectionで状態を管理する。
+        - 一方、Tree-based navigation APIはOptionalで状態を管理する。
+    - RepositoryList ReducerとPath Reducerの繋ぎ込み (Stack-based navigation API) には、StackStateを利用する。
+        - StackStateはCollectionで実装されている。
+        - appendなどの操作でPush遷移の実行を可能としている。
+    - Actionでは、StackActionというAPIを利用する。
+        - これによって、Stack上に表示されている各画面と簡単にやり取りを行うことができる。
+    - RepositoryList ReducerとPath Reducerの接続には、 `forEach(_:action:)` というAPIを使用する。
+        - これは、RepositoryList Reducer と RepositoryRow Reducer を接続する際に利用した `forEach(_:action:element)` とはまた別物となっている。
+    - View側の実装では、Pure SwiftUIの `NavigationStack(root:)` ではなく、TCA独自のStack-based navigation用のAPIである `NavigationStack(path:root:destination)` を使用する。
