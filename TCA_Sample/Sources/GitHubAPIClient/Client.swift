@@ -4,12 +4,14 @@
 //
 //  Created by 白数叡司 on 2024/04/27.
 //
+import BuildConfig
 import Dependencies
 import Entity
 import Foundation
 import XCTestDynamicOverlay
 
 public struct GithubAPIClient {
+    @Dependency(\.buildConfigurationClient) var buildConfigurationClient
     public var searchRepositories: @Sendable (_ query: String) async throws -> [Repository]
 }
 
@@ -20,9 +22,8 @@ extension GithubAPIClient: DependencyKey {
                 string: "https://api.github.com/search/repositories?q=\(query)&sort=stars"
             )!
             var request = URLRequest(url: url)
-            if let token = Bundle.main.infoDictionary?["GithubPersonalAccessToken"] as? String {
-                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            }
+            let token = self.buildConfigurationClient.fetchGithubPersonalAccessToken
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             let (data, _) = try await URLSession.shared.data(for: request)
             let repositories = try jsonDecoder.decode(
                 GithubSearchResult.self,

@@ -43,6 +43,13 @@ let package = Package(
           ]
         ),
         .target(
+          name: "BuildConfig",
+          dependencies: [
+            .product(name: "Dependencies", package: "swift-dependencies"),
+            .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
+          ]
+        ),
+        .target(
           name: "RepositoryDetailFeature",
           dependencies: [
             "Entity",
@@ -55,7 +62,10 @@ let package = Package(
           name: "Entity"
         ),
         .target(
-          name: "GithubAPIClient"
+          name: "GithubAPIClient",
+          dependencies: [
+            "BuildConfig",
+          ]
         )
     ]
 )
